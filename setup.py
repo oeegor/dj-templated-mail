@@ -3,8 +3,6 @@
 import os
 from setuptools import setup
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
-    README = readme.read()
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
@@ -16,7 +14,6 @@ setup(
     include_package_data=True,
     license='MIT License',
     description='Django app that provides possibility to render email messages from templates stored in DB.',
-    long_description=README,
     url='https://github.com/oeegor/dj-templated-mail#django-templated-mail/',
     author='Egor Orlov',
     author_email='oeegor@gmail.com',
