@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='dj-templated-mail',
-    version='0.1',
+    version='0.1.2',
     packages=['dj_templated_mail'],
     include_package_data=True,
     license='MIT License',
