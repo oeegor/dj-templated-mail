@@ -40,7 +40,6 @@ def build_templated_mail(
         message_cls = EmailMultiAlternatives
         html = _render_from_text(t.html, **context)
 
-    sender = settings.EMAIL_SENDER
     msg = message_cls(subject, text, sender, list(recipients), bcc=bcc, cc=cc)
     if html:
         msg.attach_alternative(html, "text/html")
