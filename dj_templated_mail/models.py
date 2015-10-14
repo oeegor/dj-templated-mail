@@ -25,6 +25,3 @@ class EmailTemplate(models.Model):
 
     def __unicode__(self):
         return u'{}'.format(self.template_name)
-
-    class Meta:
-        app_label = 'mail'
