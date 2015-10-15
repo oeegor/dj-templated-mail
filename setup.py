@@ -1,7 +1,21 @@
 # coding: utf-8
 
 import os
-from setuptools import setup
+from setuptools import setup, Command
+
+
+class CleanCommand(Command):
+    """Custom clean command to tidy up the project root."""
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        os.system('rm -vrf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info')
 
 
 # allow setup.py to be run from any path
@@ -40,4 +54,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
+    cmdclass={
+        'clean': CleanCommand,
+    }
 )
