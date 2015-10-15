@@ -2,14 +2,13 @@
 
 import logging
 
-from django.conf import settings
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.template import Context, Template
 
 from .models import EmailTemplate
 
 
-log = logging.getLogger('django_templated_email')
+log = logging.getLogger('dj_templated_email')
 
 
 class NoTemplateError(Exception):
@@ -22,30 +21,48 @@ def _render_from_text(text, **context):
 
 def build_templated_mail(
     template_name,
-    context,
     recipients,
+    context=None,
     sender=None,
     bcc=None,
     cc=None,
     files=None,
 ):
-    html = text = None
-    message_cls = EmailMessage
-    t = EmailTemplate.objects.filter(template_name__iexact=template_name).first()
+    context = context or {}
+    files = files or []
+
+    t = EmailTemplate.objects.filter(
+        template_name__iexact=template_name
+    ).first()
     if not t:
         raise NoTemplateError('template "{}" not found'.format(template_name))
     subject = _render_from_text(t.subject, **context)
     text = _render_from_text(t.plain_text, **context)
-    if t.html:
-        message_cls = EmailMultiAlternatives
-        html = _render_from_text(t.html, **context)
 
-    msg = message_cls(subject, text, sender, list(recipients), bcc=bcc, cc=cc)
-    if html:
-        msg.attach_alternative(html, "text/html")
-    files = [] if files is None else files
+    if t.html:
+        msg = EmailMultiAlternatives(
+            subject,
+            text,
+            sender,
+            list(recipients),
+            bcc=bcc,
+            cc=cc,
+        )
+        html = _render_from_text(t.html, **context)
+        msg.attach_alternative(html, 'text/html')
+    else:
+        msg = EmailMessage(
+            subject,
+            text,
+            sender,
+            list(recipients),
+            bcc=bcc,
+            cc=cc,
+        )
+
     for file_data in files:
         msg.attach(*file_data)
+
     return msg
 
 
@@ -66,7 +83,7 @@ def send_templated_mail(
         bcc = set(bcc) - set(cc)
     bcc = list(set(bcc) - set(recipients))
 
-    log.info('sending mail {} to {}, bcc: {}'.format(template_name, recipients, bcc))
+    log.info('sending {} to {} bcc {}'.format(template_name, recipients, bcc))
     mail = build_templated_mail(
         template_name,
         context,
