@@ -68,8 +68,8 @@ def build_templated_mail(
 
 def send_templated_mail(
     template_name,
-    context,
     recipients,
+    context=None,
     sender=None,
     bcc=None,
     cc=None,
@@ -85,9 +85,9 @@ def send_templated_mail(
 
     log.info('sending {} to {} bcc {}'.format(template_name, recipients, bcc))
     mail = build_templated_mail(
-        template_name,
-        context,
+        template_name=template_name,
         recipients=recipients,
+        context=context,
         sender=sender,
         bcc=bcc,
         cc=cc,
