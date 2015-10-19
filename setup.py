@@ -28,7 +28,7 @@ CHANGES = open(os.path.join(os.path.dirname(__file__), 'CHANGES.md')).read()
 
 setup(
     name='dj-templated-mail',
-    version='0.1.4',
+    version='0.1.5',
     packages=['dj_templated_mail'],
     include_package_data=True,
     license='MIT License',
